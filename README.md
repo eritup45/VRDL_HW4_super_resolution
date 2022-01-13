@@ -75,6 +75,13 @@ If you just want to inference the results, the pretrained weight is stored in fo
 python3 inference.py
 ```
 
+## Submission
+The final submission is the ensemble result of [these three answer.](https://drive.google.com/drive/folders/1bIyhEc8O5AFpx1AaJZ05H6fDDtDuPpaZ?usp=sharing)
+
+```shell
+python ensemble.py
+```
+
 ## Report
 
 https://hackmd.io/@Bmj6Z_QbTMy769jUvLGShA/VRDL_HW4
