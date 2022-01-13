@@ -49,7 +49,8 @@ psnrs = []
 for dir_path, dir_names, file_names in os.walk(data_path):
     for f in file_names:
         hr_img = Image.open(os.path.join(dir_path, f))
-        lr_img = hr_img.resize((int(hr_img.width / 3), int(hr_img.height / 3)), Image.BICUBIC)
+        lr_img = hr_img.resize(
+            (int(hr_img.width / 3), int(hr_img.height / 3)), Image.BICUBIC)
         sr_img = lr_img.resize((hr_img.width, hr_img.height), Image.BICUBIC)
         sr_img = convert_image(sr_img, source='pil', target='pil')
         hr_img = convert_image(hr_img, source='pil', target='pil')
@@ -66,8 +67,10 @@ with torch.no_grad():
 
         sr_imgs = model(lr_imgs)
 
-        sr_img = convert_image(sr_imgs.squeeze(0), source='[-1, 1]', target='pil')
-        hr_img = convert_image(hr_imgs.squeeze(0), source='[-1, 1]', target='pil')
+        sr_img = convert_image(sr_imgs.squeeze(
+            0), source='[-1, 1]', target='pil')
+        hr_img = convert_image(hr_imgs.squeeze(
+            0), source='[-1, 1]', target='pil')
 
         psnrs.append(cal_psnr(hr_img, sr_img))
 

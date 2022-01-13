@@ -84,8 +84,10 @@ class SubPixelConvolutionalBlock(nn.Module):
         :return: scaled output images, a tensor of size (N, n_channels, w * scaling factor, h * scaling factor)
         """
         output = self.conv(input)  # (N, n_channels * scaling factor^2, w, h)
-        output = self.pixel_shuffle(output)  # (N, n_channels, w * scaling factor, h * scaling factor)
-        output = self.prelu(output)  # (N, n_channels, w * scaling factor, h * scaling factor)
+        # (N, n_channels, w * scaling factor, h * scaling factor)
+        output = self.pixel_shuffle(output)
+        # (N, n_channels, w * scaling factor, h * scaling factor)
+        output = self.prelu(output)
 
         return output
 
@@ -175,7 +177,9 @@ class SRResNet(nn.Module):
         output = self.residual_blocks(output)  # (N, n_channels, w, h)
         output = self.conv_block2(output)  # (N, n_channels, w, h)
         output = output + residual  # (N, n_channels, w, h)
-        output = self.subpixel_convolutional_blocks(output)  # (N, n_channels, w * scaling factor, h * scaling factor)
-        sr_imgs = self.conv_block3(output)  # (N, 3, w * scaling factor, h * scaling factor)
+        # (N, n_channels, w * scaling factor, h * scaling factor)
+        output = self.subpixel_convolutional_blocks(output)
+        # (N, 3, w * scaling factor, h * scaling factor)
+        sr_imgs = self.conv_block3(output)
 
         return sr_imgs

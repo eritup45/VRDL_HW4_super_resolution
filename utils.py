@@ -10,10 +10,14 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Some constants
 rgb_weights = torch.FloatTensor([65.481, 128.553, 24.966]).to(device)
-imagenet_mean = torch.FloatTensor([0.485, 0.456, 0.406]).unsqueeze(1).unsqueeze(2)
-imagenet_std = torch.FloatTensor([0.229, 0.224, 0.225]).unsqueeze(1).unsqueeze(2)
-imagenet_mean_cuda = torch.FloatTensor([0.485, 0.456, 0.406]).to(device).unsqueeze(0).unsqueeze(2).unsqueeze(3)
-imagenet_std_cuda = torch.FloatTensor([0.229, 0.224, 0.225]).to(device).unsqueeze(0).unsqueeze(2).unsqueeze(3)
+imagenet_mean = torch.FloatTensor(
+    [0.485, 0.456, 0.406]).unsqueeze(1).unsqueeze(2)
+imagenet_std = torch.FloatTensor(
+    [0.229, 0.224, 0.225]).unsqueeze(1).unsqueeze(2)
+imagenet_mean_cuda = torch.FloatTensor([0.485, 0.456, 0.406]).to(
+    device).unsqueeze(0).unsqueeze(2).unsqueeze(3)
+imagenet_std_cuda = torch.FloatTensor([0.229, 0.224, 0.225]).to(
+    device).unsqueeze(0).unsqueeze(2).unsqueeze(3)
 
 
 class AverageMeter(object):
@@ -141,7 +145,8 @@ def convert_image(img, source, target):
                    'y-channel' (luminance channel Y in the YCbCr color format, used to calculate PSNR and SSIM)
     :return: converted image
     """
-    assert source in {'pil', '[0, 1]', '[-1, 1]'}, "Cannot convert from source format %s!" % source
+    assert source in {
+        'pil', '[0, 1]', '[-1, 1]'}, "Cannot convert from source format %s!" % source
     assert target in {'pil', '[0, 255]', '[0, 1]', '[-1, 1]', 'imagenet-norm',
                       'y-channel'}, "Cannot convert to target format %s!" % target
 
@@ -178,7 +183,8 @@ def convert_image(img, source, target):
         # Based on definitions at https://github.com/xinntao/BasicSR/wiki/Color-conversion-in-SR
         # torch.dot() does not work the same way as numpy.dot()
         # So, use torch.matmul() to find the dot product between the last dimension of an 4-D tensor and a 1-D tensor
-        img = torch.matmul(255. * img.permute(0, 2, 3, 1)[:, 4:-4, 4:-4, :], rgb_weights) / 255. + 16.
+        img = torch.matmul(255. * img.permute(0, 2, 3, 1)
+                           [:, 4:-4, 4:-4, :], rgb_weights) / 255. + 16.
 
     return img
 

@@ -15,8 +15,10 @@ crop_size = 111  # crop size of target HR images
 scaling_factor = 3  # the scaling factor for the generator; the input LR images will be downsampled from the target HR images by this factor
 
 # Model parameters
-large_kernel_size = 9  # kernel size of the first and last convolutions which transform the inputs and outputs
-small_kernel_size = 3  # kernel size of all convolutions in-between, i.e. those in the residual and subpixel convolutional blocks
+# kernel size of the first and last convolutions which transform the inputs and outputs
+large_kernel_size = 9
+# kernel size of all convolutions in-between, i.e. those in the residual and subpixel convolutional blocks
+small_kernel_size = 3
 n_channels = 64  # number of channels in-between, i.e. the input and output channels for the residual and subpixel convolutional blocks
 n_blocks = 16  # number of residual blocks
 checkpoint_dir = 'models'
@@ -51,7 +53,7 @@ def main():
                          n_channels=n_channels, n_blocks=n_blocks, scaling_factor=scaling_factor)
         # Initialize the optimizer
         optimizer = torch.optim.AdamW(params=filter(lambda p: p.requires_grad, model.parameters()),
-                                     lr=lr)
+                                      lr=lr)
 
     else:
         checkpoint = torch.load(checkpoint)
@@ -138,9 +140,12 @@ def train(train_loader, model, criterion, optimizer, epoch):
         sr_imgs = model(lr_imgs)
 
         # Calculate PSNR
-        sr_imgs_y = convert_image(sr_imgs, source='[-1, 1]', target='y-channel').squeeze(0)
-        hr_imgs_y = convert_image(hr_imgs, source='[-1, 1]', target='y-channel').squeeze(0)
-        psnr = peak_signal_noise_ratio(hr_imgs_y.cpu().detach().numpy(), sr_imgs_y.cpu().detach().numpy(), data_range=255.)
+        sr_imgs_y = convert_image(
+            sr_imgs, source='[-1, 1]', target='y-channel').squeeze(0)
+        hr_imgs_y = convert_image(
+            hr_imgs, source='[-1, 1]', target='y-channel').squeeze(0)
+        psnr = peak_signal_noise_ratio(hr_imgs_y.cpu().detach(
+        ).numpy(), sr_imgs_y.cpu().detach().numpy(), data_range=255.)
         PSNRs.update(psnr, lr_imgs.size(0))
 
         # Loss
@@ -187,9 +192,12 @@ def val(val_loader, model, epoch):
             hr_imgs = hr_imgs.to(device)
 
             sr_imgs = model(lr_imgs)
-            sr_imgs_y = convert_image(sr_imgs, source='[-1, 1]', target='y-channel').squeeze(0)
-            hr_imgs_y = convert_image(hr_imgs, source='[-1, 1]', target='y-channel').squeeze(0)
-            psnr = peak_signal_noise_ratio(hr_imgs_y.cpu().numpy(), sr_imgs_y.cpu().numpy(), data_range=255.)
+            sr_imgs_y = convert_image(
+                sr_imgs, source='[-1, 1]', target='y-channel').squeeze(0)
+            hr_imgs_y = convert_image(
+                hr_imgs, source='[-1, 1]', target='y-channel').squeeze(0)
+            psnr = peak_signal_noise_ratio(
+                hr_imgs_y.cpu().numpy(), sr_imgs_y.cpu().numpy(), data_range=255.)
             PSNRs.update(psnr, lr_imgs.size(0))
     print(f'Epoch: {epoch}, PSNR: {PSNRs.avg}')
     writer.add_scalar('PSNR/val', PSNRs.avg, epoch)

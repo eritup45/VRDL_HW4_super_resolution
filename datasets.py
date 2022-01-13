@@ -29,8 +29,10 @@ class SRDataset(Dataset):
         self.images = []
 
         assert self.split in {'train', 'val', 'test'}
-        assert lr_img_type in {'[0, 255]', '[0, 1]', '[-1, 1]', 'imagenet-norm'}
-        assert hr_img_type in {'[0, 255]', '[0, 1]', '[-1, 1]', 'imagenet-norm'}
+        assert lr_img_type in {'[0, 255]',
+                               '[0, 1]', '[-1, 1]', 'imagenet-norm'}
+        assert hr_img_type in {'[0, 255]',
+                               '[0, 1]', '[-1, 1]', 'imagenet-norm'}
 
         # If this is a training dataset, then crop dimensions must be perfectly divisible by the scaling factor
         # (If this is a test dataset, images are not cropped to a fixed size, so this variable isn't used)

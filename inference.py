@@ -23,6 +23,8 @@ test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=1, shuffle=Fa
 with torch.no_grad():
     for i, (lr_imgs, hr_imgs, image_path) in enumerate(test_loader):
         lr_imgs = lr_imgs.to(device)
-        sr_imgs = convert_image(model(lr_imgs).squeeze(0).cpu().detach(), '[-1, 1]', 'pil')
+        sr_imgs = convert_image(model(lr_imgs).squeeze(
+            0).cpu().detach(), '[-1, 1]', 'pil')
 
-        sr_imgs.save(os.path.join(output_dir, (image_path[0].split('/')[-1]).split('.png')[0] + '_pred.png'))
+        sr_imgs.save(os.path.join(
+            output_dir, (image_path[0].split('/')[-1]).split('.png')[0] + '_pred.png'))
