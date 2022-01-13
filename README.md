@@ -75,6 +75,10 @@ If you just want to inference the results, the pretrained weight is stored in fo
 python3 inference.py
 ```
 
+## Report
+
+https://hackmd.io/@Bmj6Z_QbTMy769jUvLGShA/VRDL_HW4
+
 ## Reference
 [a-PyTorch-Tutorial-to-Super-Resolution](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Super-Resolution)
 
